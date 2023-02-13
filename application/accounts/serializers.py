@@ -22,7 +22,7 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email", "password", "password_confirm", "full_name"
+            "email", "password", "password_confirm", "first_name", "last_name"
         ]
         
     def validate(self, attrs):
@@ -54,10 +54,13 @@ class TeacherRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "email", "password", "password_confirm", 
-            "full_name", "experience", "audience"
+            "first_name", "last_name", 
+            "experience", "audience"
         ]
         
     def validate(self, attrs):
+        experience = attrs.get("experience")
+        audience = attrs.get("audience")
         password = attrs.get("password")
         password_confirm = attrs.pop("password_confirm")
         

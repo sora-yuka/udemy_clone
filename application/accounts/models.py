@@ -49,14 +49,14 @@ class UserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=55)
-    first_name = models.CharField(max_length=55)
-    last_name = models.CharField(max_length=55)
-    experience = models.CharField(max_length=55, blank=True)
-    audience = models.CharField(max_length=55, blank=True)
+    password = models.CharField(max_length=155)
+    first_name = models.CharField(max_length=85)
+    last_name = models.CharField(max_length=85)
+    experience = models.CharField(max_length=85, blank=True)
+    audience = models.CharField(max_length=85, blank=True)
     is_active = models.BooleanField(default=False)
     is_mentor = models.BooleanField(default=False)
-    activation_code = models.CharField(max_length=55, blank=True)
+    activation_code = models.CharField(max_length=155, blank=True)
     confirmation_code = models.CharField(max_length=8, blank=True)
     
     objects = UserManager()

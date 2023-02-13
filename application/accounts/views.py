@@ -40,7 +40,7 @@ class TeacherRegisterAPIView(APIView):
 class MentorActivationAPIView(APIView):
     def get(self, request, activation_code):
         try:
-            user = Mentor.objects.get(activation_code=activation_code)
+            user = User.objects.get(activation_code=activation_code)
             user.is_active = True
             user.is_mentor = True
             user.activation_code = ""
