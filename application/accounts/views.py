@@ -81,7 +81,7 @@ class ChangePasswordAPIView(APIView):
             context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.set_new_password()
         return Response(
             "Пароль успешно обновлен.",
             status=status.HTTP_200_OK
