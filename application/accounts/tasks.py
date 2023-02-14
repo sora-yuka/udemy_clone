@@ -23,11 +23,12 @@ def send_confirmation_email(email, code):
     
 
 @app.task
-def send_password_recovery(email, code):
+def send_password_recovery(email, code, recovery_code):
     full_link = f"http://127.0.0.1:8000/api/v1/accounts/recovery/{code}"
     send_mail(
         "Password recovery",
-        f"Перейдите по ссылке чтобы сбросить пароль:  {full_link}",
+        f"Перейдите по ссылке чтобы сбросить пароль:  {full_link}\n"
+        f"Код для сброса пароля:  {recovery_code}",
         "sabyrkulov.nurmuhammed@gmail.com",
         [email]
     )

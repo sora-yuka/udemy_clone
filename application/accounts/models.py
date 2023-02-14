@@ -58,6 +58,7 @@ class CustomUser(AbstractUser):
     is_mentor = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=155, blank=True)
     confirmation_code = models.CharField(max_length=8, blank=True)
+    password_requested = models.DateTimeField(null=True, blank=True)
     
     objects = UserManager()
     
@@ -72,7 +73,7 @@ class CustomUser(AbstractUser):
         code = str(uuid.uuid4())
         self.activation_code = code
         
-    def create_confirmation_code(self):
+    def create_recovery_code(self):
         from random import randint
-        code = randint(000_000, 999_999)
-        self.confirmation_code = code
+        recovery_code = randint(000_000, 999_999)
+        self.confirmation_code = recovery_code

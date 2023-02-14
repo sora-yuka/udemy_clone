@@ -6,7 +6,7 @@ from application.accounts.tasks import (
     send_confirmation_email, send_confirmation_email_mentor,
     send_password_recovery
 )
-from time import sleep
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -128,14 +128,17 @@ class ForgotPasswordSerializer(serializers.Serializer):
     def send_code(self):
         email = self.validated_data.get("email")
         user = User.objects.get(email=email)
+        user.password_requested = timezone.now()
         user.create_activation_code()
+        user.create_recovery_code()
         user.save()
-        send_password_recovery.delay(email, user.activation_code)
+        send_password_recovery.delay(email, user.activation_code, user.confirmation_code)
         user.activation_code = ""
         
 
 class ForgotPasswordConfirmSerializer(serializers.Serializer):
     email = serializers.CharField(required=True)
+    recovery_code = serializers.CharField(required=True)
     password = serializers.CharField(min_length=6, required=True)
     password_confirm = serializers.CharField(min_length=6, required=True)
 
@@ -144,9 +147,18 @@ class ForgotPasswordConfirmSerializer(serializers.Serializer):
             raise serializers.ValidationError("Такого пользователя не существует.")
         return email
 
+    @staticmethod
+    def validate_code(code):
+        if not User.objects.filter(confirmation_code=recovery_code).exists():
+            raise serializers.ValidationError("Код введен не правильно!")
+
     def validate(self, attrs):
         password = attrs.get("new_password")
         password_confirm = attrs.get("new_password_confirm")
+        
+        request_time = timezone.now() - user.password_requested
+        if request_time.total_seconds() > 24 * 60 * 20:
+            raise serializers.ValidationError("Ссылка просрочена, пожалуйста сделайте новый запрос.")
         
         if password != password_confirm:
             raise serializers.ValidationError("Пароли не совпадают.")
