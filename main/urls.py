@@ -32,5 +32,6 @@ urlpatterns = [
     path('api/v1/accounts/', include('application.accounts.urls')),
     path('api/v1/profiles/', include('application.profiles.urls')),
     path('api/v1/courses/', include('application.products.urls')),
-    path('api/v1/order/', include('application.order.urls'))
+    path('api/v1/feedback/', include('application.feedback.urls')),
+    path('api/v1/order/', include('application.order.urls')),
 ]

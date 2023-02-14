@@ -15,6 +15,11 @@ class ProductSerializer(serializers.ModelSerializer):
             product = Product.objects.create(**validated_data)
             return product
         
+        # def to_representation(self, isinstance):
+        #     representation = super().to_representation(instance)
+            
+        #     representation["comment"] = instance.commtn.filter(comment=True).count()
+        #     return representation
         
 class CategorySerializer(serializers.ModelSerializer):
     

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from application.products.models import Product, Category
 from application.products.serializers import ProductSerializer, CategorySerializer
+from application.feedback.serializers import CommentSerializer
 from application.products.permissions import IsProductOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAdminUser
@@ -24,6 +25,7 @@ class ProductModelViewSet(ModelViewSet):
         
     def get_queryset(self):
         return super().get_queryset()
+    
     
     
 class CategoryModelViewSet(ModelViewSet):

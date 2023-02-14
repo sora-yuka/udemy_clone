@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
@@ -6,7 +7,6 @@ from application.accounts.tasks import (
     send_confirmation_email, send_confirmation_email_mentor,
     send_password_recovery
 )
-from django.utils import timezone
 
 User = get_user_model()
 
@@ -157,7 +157,7 @@ class ForgotPasswordConfirmSerializer(serializers.Serializer):
         password_confirm = attrs.get("new_password_confirm")
         
         request_time = timezone.now() - user.password_requested
-        if request_time.total_seconds() > 24 * 60 * 20:
+        if request_time.total_seconds() > 24 * 60 * 60:
             raise serializers.ValidationError("Ссылка просрочена, пожалуйста сделайте новый запрос.")
         
         if password != password_confirm:

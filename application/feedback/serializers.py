@@ -15,6 +15,8 @@ class RatingSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.email")
+    courses = serializers.ReadOnlyField(source="courses.title")
+#?  -->  при написании source важно обратить внимание как написан related_name в модельках.
     
     class Meta:
         model = Comment
@@ -23,7 +25,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class LikeCommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.email")
+    courses = serializers.ReadOnlyField(source="courses.title")
+    course_comment = serializers.ReadOnlyField(source="course_comment.comment")
+    
     
     class Meta:
         model = LikeComment
         fields = "__all__"
+        
+        def to_representation(self, instance):
+            representation = super().to_representation(instance)
+            
+            representation["like"] = instance.likes_comment.filter(like=True).count()
+            return representation
