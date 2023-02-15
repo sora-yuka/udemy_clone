@@ -26,7 +26,6 @@ class CommentSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         
         representation["likes"] = instance.like_comment.filter(like=True).count()
-        # representation["something"] = instance.comment
         return representation
 
 class LikeCommentSerializer(serializers.ModelSerializer):

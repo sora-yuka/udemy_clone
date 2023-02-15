@@ -31,12 +31,12 @@ class Category(models.Model):
 
 class Product(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
-    title = models.CharField(max_length=90)
-    sub_title = models.CharField(max_length=45)
+    title = models.CharField(max_length=55)
+    sub_title = models.CharField(max_length=155)
     language = models.CharField(max_length=25, choices=LANGUAGE)
     level = models.CharField(max_length=25, choices=LEVEL)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
-    description = models.TextField(blank=True)
+    description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     # image = models.ImageField(upload_to="image/") -->  не забыть довабить поле картинок.
     # video = models.FieldFile()
@@ -55,7 +55,7 @@ class ProductItem(models.Model):
     
 class ProductFile(models.Model):
     course_item_id = models.ForeignKey(ProductItem, on_delete=models.CASCADE, related_name="files")
-    course_file = models.CharField(max_length=255)
+    course_file = models.CharField(max_length=255, blank=True)
 
 
 class Archive(models.Model):
