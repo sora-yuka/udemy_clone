@@ -22,6 +22,12 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = "__all__"
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        
+        representation["likes"] = instance.like_comment.filter(like=True).count()
+        # representation["something"] = instance.comment
+        return representation
 
 class LikeCommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.email")
@@ -32,9 +38,3 @@ class LikeCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = LikeComment
         fields = "__all__"
-        
-        def to_representation(self, instance):
-            representation = super().to_representation(instance)
-            
-            representation["like"] = instance.likes_comment.filter(like=True).count()
-            return representation
