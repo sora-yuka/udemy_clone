@@ -1,22 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from application.course.choices import *
 
 User = get_user_model()
 
-LANGUAGE = (
-    ("Русский", "Русский"),
-    ("Английский", "Английский")
-)
-
-LEVEL = (
-    ("Начальный", "Начальный"),
-    ("Продвинутый", "Продвинутый"),
-    ("Профессиональный", "Профессиональный"),
-)
-
 
 class Category(models.Model):
-    category = models.SlugField(primary_key=True)
+    category = models.SlugField(primary_key=True, default="Education")
     
 #?  По желанию можно добавить.
     """
@@ -31,8 +21,8 @@ class Category(models.Model):
 
 class Course(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
-    title = models.CharField(max_length=55)
-    sub_title = models.CharField(max_length=155)
+    title = models.CharField(max_length=60)
+    sub_title = models.CharField(max_length=60)
     language = models.CharField(max_length=25, choices=LANGUAGE)
     level = models.CharField(max_length=25, choices=LEVEL)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")

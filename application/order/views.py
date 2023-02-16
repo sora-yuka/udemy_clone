@@ -25,9 +25,6 @@ class OrderModelViewSet(
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
     
-    print(user)
-    print(Course)
-    
 
 class ArchiveModelViewSet(
     mixins.ListModelMixin, mixins.RetrieveModelMixin, 

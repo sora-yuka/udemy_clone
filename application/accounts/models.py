@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
+from application.accounts.choices import *
 
 
 class UserManager(BaseUserManager):
@@ -51,8 +52,8 @@ class CustomUser(AbstractUser):
     password = models.CharField(max_length=155)
     first_name = models.CharField(max_length=85)
     last_name = models.CharField(max_length=85)
-    experience = models.CharField(max_length=85, blank=True)
-    audience = models.CharField(max_length=85, blank=True)
+    experience = models.CharField(max_length=85, choices=EXPERIENCE, blank=True)
+    audience = models.CharField(max_length=85, choices=AUDIENCE, blank=True)
     is_active = models.BooleanField(default=False)
     is_mentor = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=155, blank=True)

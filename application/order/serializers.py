@@ -43,10 +43,3 @@ class ArchiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Archive
         fields = "__all__"
-        
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        
-        representation["user"] = instance.user.email
-        return representation

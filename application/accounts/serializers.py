@@ -59,28 +59,12 @@ class TeacherRegisterSerializer(serializers.ModelSerializer):
         ]
         
     def validate(self, attrs):
-        experience = attrs.get("experience")
-        audience = attrs.get("audience")
         password = attrs.get("password")
         password_confirm = attrs.pop("password_confirm")
         
         if password != password_confirm:
             raise serializers.ValidationError("Пароли не совпадают.")
     
-        first_answer = [
-            "лично, частным образом", "лично, профессионально", 
-            "онлайн", "другое"
-        ]
-
-        second_answer = [
-            "в настоящий момент нет", "у меня маленькая аудитория",
-            "у меня достаточная аудитория"
-        ]
-        
-        if experience not in first_answer:
-            raise serializers.ValidationError("Вы не ответили на вопрос.")
-        if audience not in second_answer:
-            raise serializers.ValidationError("Ответьте на вопрос.")
         return attrs
     
     def create(self, validated_data):
