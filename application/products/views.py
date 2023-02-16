@@ -1,17 +1,16 @@
 from django.shortcuts import render
-from application.products.models import Product, Category, Archive
+from rest_framework import mixins
+from rest_framework.response import Response
+from application.products.models import Product, Category
 from application.feedback.serializers import CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework import mixins
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.response import Response
-from application.products.permissions import (
-    IsProductOwnerOrReadOnly, IsArchiveOwner
-)
+from rest_framework.generics import ListAPIView
+from application.products.permissions import IsProductOwnerOrReadOnly
 from application.products.serializers import (
-    ProductSerializer, ArchiveSerializer, CategorySerializer
+    ProductSerializer, CategorySerializer
 )
 
 
@@ -31,14 +30,6 @@ class ProductModelViewSet(ModelViewSet):
         return super().get_queryset()
 
 
-class ArchiveModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
-    serializer_class = ArchiveSerializer
-    queryset = Archive.objects.all()
-    permission_classes = [IsArchiveOwner]
-    # filter_backends = [DjangoFilterBackend, SearchFilter]
-    # search_fields = ["title"]
-    
-    
 class CategoryModelViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()

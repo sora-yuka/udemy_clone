@@ -61,11 +61,3 @@ class ProductFile(models.Model):
     
     def __str__(self):
         return f"{self.course_file}"
-
-
-class Archive(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="archives")
-    course = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="archives")
-    
-    def __str__(self):
-        return f"{self.user} - archived course - {self.course}"

@@ -11,3 +11,9 @@ class Order(models.Model):
     
     def __str__(self):
         return self.course
+    
+
+class Archive(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="archives")
+    course = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="archives")
+    
