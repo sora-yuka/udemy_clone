@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers
+from application.feedback.models import Comment
 from application.feedback.serializers import CommentSerializer
 from application.course.models import (
     Course, CourseFile, CourseItem, Category
@@ -42,21 +43,28 @@ class CourseSerializer(serializers.ModelSerializer):
 
         course_item = CourseItem.objects.create(**course_item_data)
         course.course_item = course_item
-        
-        course_item_file_data = {
-            "course_item_id": course_item,
-            # "course": "example course"
-        }
-        
-        course_item_file = CourseFile.objects.create(**course_item_file_data)
-        course_item.course_item_file = course_item_file
-        
+
         course.save()
         course_item.save()
-        course_item_file.save()
         
         return course
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        comment = Comment.objects.filter(course=instance.id)
+        comments = CommentSerializer(comment, many=True).data
         
+        representation["comment"] = comments
+        return representation
+        
+    
+class CourseFileSerializer(serializers.ModelSerializer):
+    course = serializers.ReadOnlyField(source="course.id")
+    
+    class Meta:
+        model = CourseFile
+        fields = "__all__"
+    
     
 class CategorySerializer(serializers.ModelSerializer):
     

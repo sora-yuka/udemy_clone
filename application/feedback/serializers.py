@@ -15,7 +15,6 @@ class RatingSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.email")
-    courses = serializers.ReadOnlyField(source="courses.title")
 #?  -->  при написании source важно обратить внимание как написан related_name в модельках.
     
     class Meta:
@@ -30,9 +29,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class LikeCommentSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.email")
-    courses = serializers.ReadOnlyField(source="courses.title")
-    course_comment = serializers.ReadOnlyField(source="course_comment.comment")
-    
     
     class Meta:
         model = LikeComment
