@@ -2,18 +2,18 @@ from django.db import transaction
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from application.feedback.serializers import CommentSerializer
-from application.products.models import (
-    Product, ProductFile, ProductItem, Category
+from application.course.models import (
+    Course, CourseFile, CourseItem, Category
 )
 
 user = get_user_model()
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     owner = serializers.EmailField(source="owner.full_name", required=False)
     
     class Meta:
-        model = Product
+        model = Course
         fields = [
             "id", "owner", "title", "sub_title", "description", "language",
             "level", "category", "price", "created_at", "updated_at"
@@ -21,7 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
         
     @transaction.atomic
     def create(self, validated_data):
-        product_data = {
+        course_data = {
             "owner": validated_data.get("owner"),
             "title": validated_data["title"],
             "sub_title": validated_data.pop("sub_title"),
@@ -34,36 +34,36 @@ class ProductSerializer(serializers.ModelSerializer):
             "updated_at": validated_data.get("updated_at"),
         }
         
-        product = Product.objects.create(**product_data)
+        course = Course.objects.create(**course_data)
         
-        product_item_data = {
+        course_item_data = {
             "title": validated_data["title"],
             "description": validated_data.get("description"),
-            "course_id": product.id,
+            "course_id": course.id,
         }
 
-        product_item = ProductItem.objects.create(**product_item_data)
-        product.product_item = product_item
+        course_item = CourseItem.objects.create(**course_item_data)
+        course.course_item = course_item
         
-        archive_data = {
-            "course_id": product.id,
-            "user_id": self.context["request"].user.id
-        }
+        # archive_data = {
+        #     "course_id": product.id,
+        #     "user_id": self.context["request"].user.id
+        # }
 
         
-        product_item_file_data = {
-            "course_item_id": product_item,
+        course_item_file_data = {
+            "course_item_id": course_item,
             # "course": "example course"
         }
         
-        product_item_file = ProductFile.objects.create(**product_item_file_data)
-        product_item.product_item_file = product_item_file
+        course_item_file = CourseFile.objects.create(**course_item_file_data)
+        course_item.course_item_file = course_item_file
         
-        product.save()
-        product_item.save()
-        product_item_file.save()
+        course.save()
+        course_item.save()
+        course_item_file.save()
         
-        return product
+        return course
         
     
 class CategorySerializer(serializers.ModelSerializer):

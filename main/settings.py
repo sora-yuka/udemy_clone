@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     
     # packages
     'application.accounts',
-    'application.products',
+    'application.course',
     'application.order',
     'application.profiles',
     'application.feedback',

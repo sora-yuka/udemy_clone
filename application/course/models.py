@@ -29,7 +29,7 @@ class Category(models.Model):
         return self.category
     
 
-class Product(models.Model):
+class Course(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
     title = models.CharField(max_length=55)
     sub_title = models.CharField(max_length=155)
@@ -47,16 +47,16 @@ class Product(models.Model):
         return self.title
 
 
-class ProductItem(models.Model):
-    course = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="items")
+class CourseItem(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=185)
     description = models.TextField()
     
     def __str__(self):
         return f"{self.title}"
     
-class ProductFile(models.Model):
-    course_item_id = models.ForeignKey(ProductItem, on_delete=models.CASCADE, related_name="files")
+class CourseFile(models.Model):
+    course_item_id = models.ForeignKey(CourseItem, on_delete=models.CASCADE, related_name="files")
     course_file = models.CharField(max_length=255, blank=True)
     
     def __str__(self):
