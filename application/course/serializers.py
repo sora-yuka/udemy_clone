@@ -1,12 +1,9 @@
 from django.db import transaction
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 from application.feedback.serializers import CommentSerializer
 from application.course.models import (
     Course, CourseFile, CourseItem, Category
 )
-
-user = get_user_model()
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -24,12 +21,12 @@ class CourseSerializer(serializers.ModelSerializer):
         course_data = {
             "owner": validated_data.get("owner"),
             "title": validated_data["title"],
-            "sub_title": validated_data.pop("sub_title"),
+            "sub_title": validated_data.get("sub_title"),
             "description": validated_data["description"],
-            "language": validated_data.pop("language"),
-            "level": validated_data.pop("level"),
-            "category": validated_data.pop("category"),
-            "price": validated_data.pop("price"),
+            "language": validated_data.get("language"),
+            "level": validated_data.get("level"),
+            "category": validated_data.get("category"),
+            "price": validated_data.get("price"),
             "created_at": validated_data.get("created_at"),
             "updated_at": validated_data.get("updated_at"),
         }
@@ -44,12 +41,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
         course_item = CourseItem.objects.create(**course_item_data)
         course.course_item = course_item
-        
-        # archive_data = {
-        #     "course_id": product.id,
-        #     "user_id": self.context["request"].user.id
-        # }
-
         
         course_item_file_data = {
             "course_item_id": course_item,
