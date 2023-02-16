@@ -1,9 +1,12 @@
 from django.db import transaction
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from application.feedback.serializers import CommentSerializer
 from application.products.models import (
-    Product, ProductFile, ProductItem, Category
+    Product, ProductFile, ProductItem, Category, Archive
 )
+
+user = get_user_model()
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -42,21 +45,42 @@ class ProductSerializer(serializers.ModelSerializer):
         product_item = ProductItem.objects.create(**product_item_data)
         product.product_item = product_item
         
+        archive_data = {
+            "course_id": product.id,
+            "user_id": self.context["request"].user.id
+        }
+
+        archive = Archive.objects.create(**archive_data)
+        product.archive = archive
+        
         product_item_file_data = {
             "course_item_id": product_item,
             # "course": "example course"
         }
-
+        
         product_item_file = ProductFile.objects.create(**product_item_file_data)
         product_item.product_item_file = product_item_file
         
         product.save()
         product_item.save()
         product_item_file.save()
+        archive.save()
         
         return product
         
 
+class ArchiveSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Archive
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        
+        representation["user"] = instance.user.email
+        representation["course"] = instance.course.title
+        return representation
     
 class CategorySerializer(serializers.ModelSerializer):
     

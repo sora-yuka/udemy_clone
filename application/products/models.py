@@ -52,10 +52,15 @@ class ProductItem(models.Model):
     title = models.CharField(max_length=185)
     description = models.TextField()
     
+    def __str__(self):
+        return f"{self.title}"
     
 class ProductFile(models.Model):
     course_item_id = models.ForeignKey(ProductItem, on_delete=models.CASCADE, related_name="files")
     course_file = models.CharField(max_length=255, blank=True)
+    
+    def __str__(self):
+        return f"{self.course_file}"
 
 
 class Archive(models.Model):
@@ -63,4 +68,4 @@ class Archive(models.Model):
     course = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="archives")
     
     def __str__(self):
-        return f"{self.user} archived {user.course}"
+        return f"{self.user} - archived course - {self.course}"
