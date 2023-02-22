@@ -25,7 +25,7 @@ class Rating(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     courses = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="comments")
-    comment = models.CharField(max_length=255)
+    comment = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     
@@ -38,6 +38,7 @@ class LikeComment(models.Model):
     courses = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="likes_comment")
     course_comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="like_comment")
     like = models.BooleanField(default=False)
+    dislike = models.BooleanField(default=False)
     
     def __str__(self):
         return f"Liked - {self.courses}"

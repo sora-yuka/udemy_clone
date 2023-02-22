@@ -17,7 +17,7 @@ class CourseSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        comment = Comment.objects.filter(course=instance.id)
+        comment = Comment.objects.filter(courses=instance.id)
         comments = CommentSerializer(comment, many=True).data
         
         representation["comment"] = comments

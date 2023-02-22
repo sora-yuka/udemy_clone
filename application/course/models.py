@@ -45,8 +45,8 @@ class Course(models.Model):
     secondery_category = models.ForeignKey(SeconderyCategory, on_delete=models.CASCADE, related_name="course_secondery_category")
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    # image = models.ImageField(upload_to="image/") -->  не забыть довабить поле картинок.
-    # video = models.FieldFile()
+    # image = models.ImageField(upload_to="Image-content/")
+    # video = models.FieldFile()  -->  добавить возможность постить видео ролик
     updated_at = models.DateField(auto_now=True)
     created_at = models.DateField(auto_now_add=True)
     

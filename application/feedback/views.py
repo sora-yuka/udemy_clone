@@ -27,10 +27,16 @@ class CommentAPIView(ModelViewSet):
         
     
 
-class LikeCommentAPIView(CreateAPIView, ListAPIView, DestroyAPIView):
+class LikeCommentAPIView(CreateAPIView, ListAPIView):
     serializer_class = LikeCommentSerializer
     queryset = LikeComment.objects.all()
     permission_classes = [IsFeedbackOwner]
     
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+    
+
+class LikeCommentDestroyAPIView(DestroyAPIView):
+    serializer_class = LikeCommentSerializer
+    queryset = LikeComment.objects.all()
+    permission_classes = [IsFeedbackOwner]

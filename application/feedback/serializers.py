@@ -25,6 +25,8 @@ class CommentSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         
         representation["likes"] = instance.like_comment.filter(like=True).count()
+        representation["dislikes"] = instance.like_comment.filter(dislike=True).count()
+#?      при написании representation важно обратить внимание на наличие related_name у связываемого объекта.
         return representation
 
 class LikeCommentSerializer(serializers.ModelSerializer):
@@ -33,3 +35,5 @@ class LikeCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = LikeComment
         fields = "__all__"
+        
+    
