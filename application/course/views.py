@@ -10,7 +10,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import ListAPIView
 from application.course.permissions import IsCourseOwnerOrReadOnly
 from application.course.serializers import (
-    CourseSerializer, CategorySerializer
+    CourseSerializer, CategorySerializer, 
+    SubCategory, SeconderyCategory
 )
 
 
@@ -33,4 +34,16 @@ class CourseModelViewSet(ModelViewSet):
 class CategoryModelViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+    permission_classes = [IsAdminUser]
+    
+
+class SubCategoryModelViewSet(ModelViewSet):
+    serializer_class = SubCategory
+    queryset = SubCategory.objects.all()
+    permission_classes = [IsAdminUser]
+    
+
+class SeconderyCategoryModelViewSet(ModelViewSet):
+    serializer_class = SeconderyCategory
+    queryset = SeconderyCategory.objects.all()
     permission_classes = [IsAdminUser]

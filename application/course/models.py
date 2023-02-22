@@ -6,26 +6,43 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    category = models.SlugField(primary_key=True, default="Education")
+    category = models.CharField(max_length=60, primary_key=True, default="Development")
     
-#?  По желанию можно добавить.
-    """
-    sub_category = models.ForeignKey(
-        "Category", on_delete=models.CASCADE, 
-        blank=True, null=True, related_name="sub_categorys"
-    )
-    """    
     def __str__(self):
         return self.category
     
+    
+class SubCategory(models.Model):
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, 
+        related_name="sub_categorys",
+    )
+    sub_category = models.CharField(max_length=60, primary_key=True, default="Web Development")
+    
+    def __str__(self):
+        return self.sub_category
+    
+    
+class SeconderyCategory(models.Model):
+    sub_category = models.ForeignKey(
+        SubCategory, on_delete = models.CASCADE, 
+        related_name="secondery_categorys",
+    )
+    secondery_category = models.CharField(max_length=60, primary_key=True, default="Python")
+    
+    def __str__(self):
+        return self.secondery_category
+    
 
 class Course(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="course_owner")
     title = models.CharField(max_length=60)
     sub_title = models.CharField(max_length=60)
     language = models.CharField(max_length=25, choices=LANGUAGE)
     level = models.CharField(max_length=25, choices=LEVEL)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="course_category")
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="course_subcategory")
+    secondery_category = models.ForeignKey(SeconderyCategory, on_delete=models.CASCADE, related_name="course_secondery_category")
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     # image = models.ImageField(upload_to="image/") -->  не забыть довабить поле картинок.
