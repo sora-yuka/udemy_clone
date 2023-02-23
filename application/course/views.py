@@ -51,11 +51,3 @@ class CourseModelViewSet(ModelViewSet):
 class CourseItemModelViewSet(ModelViewSet):
     serializer_class = CourseItemSerializer
     queryset = CourseItem.objects.all()
-
-
-# class CourseFileModelViewSet(ListModelMixin,
-#                         CreateModelMixin, 
-#                         DestroyModelMixin,
-#                         GenericViewSet):
-#     serializer_class = CourseFileSerializer
-#     queryset = CourseFile.objects.all()
