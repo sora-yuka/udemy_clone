@@ -1,21 +1,23 @@
 from django.shortcuts import render
-from rest_framework import mixins
-from rest_framework.response import Response
-from application.course.models import Course, Category
-from application.feedback.serializers import CommentSerializer, RatingSerializer
-from application.feedback.models import Rating
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import ListAPIView
-from application.course.permissions import IsCourseOwnerOrReadOnly
-from rest_framework.decorators import action
-from rest_framework import status
-from application.course.serializers import (
-    CourseSerializer, CategorySerializer, 
-    SubCategory, SeconderyCategory
+from rest_framework.mixins import (
+    ListModelMixin, CreateModelMixin, DestroyModelMixin
 )
+from rest_framework.filters import SearchFilter, OrderingFilter
+from application.feedback.models import Rating
+from application.course.models import Course, CourseFile, CourseItem
+from application.course.serializers import (
+    CourseSerializer, CourseFileSerializer, CourseItemSerializer
+)
+from application.feedback.serializers import CommentSerializer, RatingSerializer
+from application.course.permissions import IsCourseOwnerOrReadOnly
 
 
 class CourseModelViewSet(ModelViewSet):
@@ -44,21 +46,16 @@ class CourseModelViewSet(ModelViewSet):
         rating_obj.rating = request.data["rating"]
         rating_obj.save()
         return Response(request.data, status=status.HTTP_201_CREATED)
-
-
-class CategoryModelViewSet(ModelViewSet):
-    serializer_class = CategorySerializer
-    queryset = Category.objects.all()
-    permission_classes = [IsAdminUser]
     
-
-class SubCategoryModelViewSet(ModelViewSet):
-    serializer_class = SubCategory
-    queryset = SubCategory.objects.all()
-    permission_classes = [IsAdminUser]
     
+class CourseItemModelViewSet(ModelViewSet):
+    serializer_class = CourseItemSerializer
+    queryset = CourseItem.objects.all()
 
-class SeconderyCategoryModelViewSet(ModelViewSet):
-    serializer_class = SeconderyCategory
-    queryset = SeconderyCategory.objects.all()
-    permission_classes = [IsAdminUser]
+
+# class CourseFileModelViewSet(ListModelMixin,
+#                         CreateModelMixin, 
+#                         DestroyModelMixin,
+#                         GenericViewSet):
+#     serializer_class = CourseFileSerializer
+#     queryset = CourseFile.objects.all()

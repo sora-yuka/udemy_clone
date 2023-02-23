@@ -4,8 +4,7 @@ from application.feedback.serializers import CommentSerializer
 from rest_framework.decorators import action
 from django.db.models import Avg
 from application.course.models import (
-    Course, CourseFile, CourseItem, Category,
-    SubCategory, SeconderyCategory
+    Course, CourseFile, CourseItem,
 )
 
 
@@ -15,8 +14,10 @@ class CourseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Course
-        fields = "__all__"
-        
+        fields = [
+            "id", "owner", "title", "sub_title", "category", "sub_category", "secondery_category",
+            "description", "language", "level", "price", "image", "video", "created_at", "updated_at",
+        ]
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -26,31 +27,32 @@ class CourseSerializer(serializers.ModelSerializer):
         representation["comment"] = CommentSerializer(comment, many=True).data
         return representation
         
-    
+        
 class CourseFileSerializer(serializers.ModelSerializer):
-    course = serializers.ReadOnlyField(source="course.id")
-    
+
     class Meta:
         model = CourseFile
         fields = "__all__"
-    
-    
-class CategorySerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Category
-        fields = "__all__"
-        
-
-class SubCategorySerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = SubCategory
-        fields = "__all__"
         
         
-class SeconderyCategorySerializer(serializers.ModelSerializer):
+class CourseItemSerializer(serializers.ModelSerializer):
+    file = CourseFileSerializer(many=True, read_only=True)
+    course_file = serializers.ListField(
+        child=serializers.FileField(max_length=None, allow_empty_file=False, use_url=False),
+        min_length=5,
+        max_length=None,
+        write_only=True, 
+    )
     
     class Meta:
-        model = SeconderyCategory
+        model = CourseItem
         fields = "__all__"
+        
+    
+    def create(self, validated_data):
+        files_data = validated_data.pop("course_file")
+        course_file = CourseItem.objects.create(**validated_data)
+        for file in files_data:
+            CourseFile.objects.create(course_file=course_file, file=file)
+        
+        return course_file

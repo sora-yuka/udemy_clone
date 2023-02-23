@@ -45,8 +45,8 @@ class Course(models.Model):
     secondery_category = models.ForeignKey(SeconderyCategory, on_delete=models.CASCADE, related_name="course_secondery_category")
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    # image = models.ImageField(upload_to="Image-content/")
-    # video = models.FieldFile()  -->  добавить возможность постить видео ролик
+    image = models.ImageField(upload_to="Image-content/")
+    video = models.FileField(upload_to="Video-content/", blank=True, null=True)
     updated_at = models.DateField(auto_now=True)
     created_at = models.DateField(auto_now_add=True)
     
@@ -55,7 +55,7 @@ class Course(models.Model):
 
 
 class CourseItem(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="items")
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=185)
     description = models.TextField()
     
@@ -63,8 +63,8 @@ class CourseItem(models.Model):
         return f"{self.title}"
     
 class CourseFile(models.Model):
-    course_item_id = models.ForeignKey(CourseItem, on_delete=models.CASCADE, related_name="files")
-    course_file = models.CharField(max_length=255, blank=True)
+    course_file = models.ForeignKey(CourseItem, on_delete=models.CASCADE, related_name="course_files")
+    file = models.FileField(upload_to="Course-content")
     
     def __str__(self):
-        return f"{self.course_file}"
+        return str(self.file)
