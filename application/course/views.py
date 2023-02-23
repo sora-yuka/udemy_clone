@@ -4,12 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAdminUser
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import (
-    ListModelMixin, CreateModelMixin, DestroyModelMixin
-)
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from application.feedback.models import Rating
 from application.course.models import Course, CourseFile, CourseItem
@@ -51,3 +47,4 @@ class CourseModelViewSet(ModelViewSet):
 class CourseItemModelViewSet(ModelViewSet):
     serializer_class = CourseItemSerializer
     queryset = CourseItem.objects.all()
+    permission_classes = [IsCourseOwnerOrReadOnly]
