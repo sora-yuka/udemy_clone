@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'application.order',
     'application.profiles',
     'application.feedback',
+    'application.favorite',
 ]
 
 MIDDLEWARE = [

@@ -57,12 +57,12 @@
   - Настроить файл ".env"
  
   - Сделать миграцию.
-    ```python
+    ```
     ./manage.py makemigrations
     ./manage.py migrate
     ``` 
 
   - Запустить проект.
-    ```python
+    ```
     ./manage.py runserver
     ``` 

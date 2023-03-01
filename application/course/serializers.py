@@ -9,7 +9,7 @@ from application.course.models import (
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    owner = serializers.EmailField(source="owner.full_name", required=False)
+    owner = serializers.EmailField(source="owner.email", required=False)
     description = serializers.CharField(min_length=200)
     
     class Meta:

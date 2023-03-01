@@ -17,7 +17,7 @@ class Rating(models.Model):
     )
     
     def __str__(self):
-        return f"{self.courses} {self.rating}"
+        return f"{self.courses} course rating is {self.rating}"
     
     
 class Comment(models.Model):

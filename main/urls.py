@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/v1/courses/', include('application.course.urls')),
     path('api/v1/feedback/', include('application.feedback.urls')),
     path('api/v1/order/', include('application.order.urls')),
+    path('api/v1/favorite/', include('application.favorite.urls'))
 ]
 
 urlpatterns += static(

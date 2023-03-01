@@ -21,8 +21,8 @@ class CourseModelViewSet(ModelViewSet):
     queryset = Course.objects.all()
     permission_classes = [IsCourseOwnerOrReadOnly]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ["category", "owner"]
-    search_fields = ["title"]
+    filterset_fields = ["category", "sub_category", "secondery_category"]
+    search_fields = ["title", "category__category", "owner__email"]
     order_fields = ["price"]
     
     def perform_create(self, serializer):
