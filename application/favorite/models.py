@@ -11,4 +11,4 @@ class Favorite(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="favorites")
     
     def __str__(self):
-        return self.course
+        return f"{self.course}"

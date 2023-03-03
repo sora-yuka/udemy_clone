@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from application.feedback.models import Comment, Rating
+from application.feedback.models import Comment
 from application.feedback.serializers import CommentSerializer
 from rest_framework.decorators import action
 from django.db.models import Avg

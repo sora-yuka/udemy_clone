@@ -1,8 +1,10 @@
+import statistics
 from rest_framework import serializers
-from django.shortcuts import get_object_or_404
+from django.db.models import Avg
 from application.favorite.models import Favorite
 from application.feedback.models import Rating, Comment
 from application.feedback.serializers import RatingSerializer
+from rest_framework.response import Response
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
@@ -14,12 +16,16 @@ class FavoriteSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        ratings = RatingSerializer(instance.course.ratings, many=True).data
         
         representation["Preview"] = str(instance.course.image)
         representation["Title"] = instance.course.title
         representation["Teacher"] = instance.course.owner.first_name
-        # representation["Ratings"] = (RatingSerializer(Rating.objects.all()).data)
-        representation["Ratings"] = RatingSerializer(Rating.objects.get(courses_id=instance.course.id)).data
+        try:
+            representation["Ratings"] = statistics.mean([rating["rating"] for rating in ratings])
+        except:
+            pass
         representation["Couments"] = Comment.objects.filter(courses_id=instance.course.id).count()
+        representation["Price"] = instance.course.price
         
         return representation
