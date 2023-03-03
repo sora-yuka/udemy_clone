@@ -9,11 +9,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from application.feedback.models import Rating
 from application.course.models import Course, CourseFile, CourseItem
+from application.feedback.serializers import CommentSerializer, RatingSerializer
+from application.course.permissions import IsCourseOwnerOrReadOnly
 from application.course.serializers import (
     CourseSerializer, CourseFileSerializer, CourseItemSerializer
 )
-from application.feedback.serializers import CommentSerializer, RatingSerializer
-from application.course.permissions import IsCourseOwnerOrReadOnly
 
 
 class CourseModelViewSet(ModelViewSet):

@@ -29,3 +29,4 @@ class FavoriteSerializer(serializers.ModelSerializer):
         representation["Price"] = instance.course.price
         
         return representation
+    
